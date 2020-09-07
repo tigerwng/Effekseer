@@ -1893,11 +1893,6 @@ namespace efk
 		return ImGui::Begin(utf8label, p_open, (ImGuiWindowFlags)extra_flags);
 	}
 
-	bool GUIManager::BeginDock(const char16_t* label, WindowFlags extra_flags, Vec2 default_size)
-	{
-		return ImGui::BeginDock(utf8str<256>(label), nullptr, (int32_t)extra_flags, ImVec2(default_size.X, default_size.Y));
-	}
-
 	void GUIManager::EndDock()
 	{
 		ImGui::End();
