@@ -32,3 +32,25 @@ FalloffParameter_Pow_Name,指数
 FalloffParameter_BlendType_Add_Name,加算
 Falloffparameter_BlendType_Sub_Name,減算
 FalloffParameter_BlendType_Mul_Name,乗算
+
+ProcedualModelType_Mesh_Name,Mesh
+ProcedualModelType_Ribbon_Name,Ribbon
+
+ProcedualModelPrimitiveType_Sphere_Name,Sphere
+ProcedualModelPrimitiveType_Cone_Name,Cone
+ProcedualModelPrimitiveType_Cylinder_Name,Cylinder
+
+PM_Type_Name,Type
+PM_AngleBeginEnd_Name,Region(Angle)
+PM_AngleDivision_Name,Division(x)
+PM_AxisDivision_Name,Division(y)
+PM_Rotate_Name,Rotated angle
+PM_Vertices_Name,The number of vertices
+PM_Count_Name, THe number of ribbons
+
+PM_PrimitiveType_Name, PrimitiveType
+PM_Radius_Name,Radius1
+PM_Radius2_Name,Radius2
+PM_Depth_Name,Depth
+PM_DepthMin_Name,Depth(Bottom)
+PM_DepthMax_Name,Depth(Top)

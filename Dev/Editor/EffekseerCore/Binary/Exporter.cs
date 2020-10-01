@@ -718,8 +718,13 @@ namespace Effekseer.Binary
 					}
 					else
 					{
+						data.Add(((int)param.CrossSection.Value).GetBytes());
 						data.Add(param.Rotate.Value.GetBytes());
 						data.Add(param.Vertices.Value.GetBytes());
+						data.Add(param.ScaleBottom.Value.GetBytes());
+						data.Add(param.ScaleTop.Value.GetBytes());
+						data.Add(param.Noises.X.Value.GetBytes());
+						data.Add(param.Noises.Y.Value.GetBytes());
 						data.Add(param.Count.Value.GetBytes());
 					}
 
@@ -744,6 +749,17 @@ namespace Effekseer.Binary
 						data.Add(param.Radius2.Value.GetBytes());
 						data.Add(param.Depth.Value.GetBytes());
 					}
+
+					data.Add((byte[])param.TiltNoiseFrequency);
+					data.Add((byte[])param.TiltNoiseOffset);
+					data.Add((byte[])param.TiltNoisePower);
+					data.Add((byte[])param.WaveNoiseFrequency);
+					data.Add((byte[])param.WaveNoiseOffset);
+					data.Add((byte[])param.WaveNoisePower);
+					data.Add((byte[])param.CurlNoiseFrequency);
+					data.Add((byte[])param.CurlNoiseOffset);
+					data.Add((byte[])param.CurlNoisePower);
+
 				}
 			}
 

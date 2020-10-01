@@ -593,57 +593,118 @@ namespace Effekseer.Data
 
 	public enum ProcedualModelType : int
 	{
+		[Key(key = "ProcedualModelType_Mesh")]
 		Mesh,
+		[Key(key = "ProcedualModelType_Ribbon")]
 		Ribbon,
 	}
 	public enum ProcedualModelPrimitiveType : int
 	{
+		[Key(key = "ProcedualModelPrimitiveType_Sphere")]
 		Sphere,
+		[Key(key = "ProcedualModelPrimitiveType_Cone")]
 		Cone,
+		[Key(key = "ProcedualModelPrimitiveType_Cylinder")]
 		Cylinder,
+	}
+
+	public enum ProcedualModelCrossSectionType : int
+	{
+		Plane,
+		Cross,
+		Point,
 	}
 
 	public class ProcedualModelParameter
 	{
+		const int SelecterType = 100;
+		const int SelecterPrimitive = 200;
+
+		[Selector(ID = SelecterType)]
 		[Key(key = "PM_Type")]
 		public Value.Enum<ProcedualModelType> Type { get; private set; } = new Value.Enum<ProcedualModelType>(ProcedualModelType.Mesh);
 
+		[Selected(ID = SelecterType, Value = (int)ProcedualModelType.Mesh)]
 		[Key(key = "PM_AngleBeginEnd")]
 		public Value.Vector2D AngleBeginEnd { get; private set; } = new Value.Vector2D(0.0f, 360.0f);
 
-
+		[Selected(ID = SelecterType, Value = (int)ProcedualModelType.Mesh)]
 		[Key(key = "PM_AngleDivision")]
 		public Value.Int AngleDivision { get; private set; } = new Value.Int(10);
 
+		[Selected(ID = SelecterType, Value = (int)ProcedualModelType.Mesh)]
 		[Key(key = "PM_AxisDivision")]
 		public Value.Int AxisDivision { get; private set; } = new Value.Int(10);
 
+		[Selected(ID = SelecterType, Value = (int)ProcedualModelType.Ribbon)]
+		[Key(key = "PM_CrossSection")]
+		public Value.Enum<ProcedualModelCrossSectionType> CrossSection { get; private set; } = new Value.Enum<ProcedualModelCrossSectionType>(ProcedualModelCrossSectionType.Plane);
+
+		[Selected(ID = SelecterType, Value = (int)ProcedualModelType.Ribbon)]
 		[Key(key = "PM_Rotate")]
 		public Value.Float Rotate { get; private set; } = new Value.Float(1.0f);
 
+		[Selected(ID = SelecterType, Value = (int)ProcedualModelType.Ribbon)]
 		[Key(key = "PM_Vertices")]
 		public Value.Int Vertices { get; private set; } = new Value.Int(10);
 
+		[Selected(ID = SelecterType, Value = (int)ProcedualModelType.Ribbon)]
+		[Key(key = "PM_ScaleBottom")]
+		public Value.Float ScaleBottom { get; private set; } = new Value.Float(0.2f);
+
+		[Selected(ID = SelecterType, Value = (int)ProcedualModelType.Ribbon)]
+		[Key(key = "PM_ScaleTop")]
+		public Value.Float ScaleTop { get; private set; } = new Value.Float(0.2f);
+
+		[Selected(ID = SelecterType, Value = (int)ProcedualModelType.Ribbon)]
+		[Key(key = "PM_Noises")]
+		public Value.Vector2D Noises { get; private set; } = new Value.Vector2D(0.0f, 0.0f);
+
+		[Selected(ID = SelecterType, Value = (int)ProcedualModelType.Ribbon)]
 		[Key(key = "PM_Count")]
 		public Value.Int Count { get; private set; } = new Value.Int(2);
 
+		[Selector(ID = SelecterPrimitive)]
 		[Key(key = "PM_PrimitiveType")]
 		public Value.Enum<ProcedualModelPrimitiveType> PrimitiveType { get; private set; } = new Value.Enum<ProcedualModelPrimitiveType>(ProcedualModelPrimitiveType.Sphere);
 
+		[Selected(ID = SelecterPrimitive, Value = (int)ProcedualModelPrimitiveType.Sphere)]
+		[Selected(ID = SelecterPrimitive, Value = (int)ProcedualModelPrimitiveType.Cone)]
+		[Selected(ID = SelecterPrimitive, Value = (int)ProcedualModelPrimitiveType.Cylinder)]
 		[Key(key = "PM_Radius")]
 		public Value.Float Radius { get; private set; } = new Value.Float(1.0f);
 
+		[Selected(ID = SelecterPrimitive, Value = (int)ProcedualModelPrimitiveType.Cylinder)]
 		[Key(key = "PM_Radius2")]
 		public Value.Float Radius2 { get; private set; } = new Value.Float(1.0f);
 
+		[Selected(ID = SelecterPrimitive, Value = (int)ProcedualModelPrimitiveType.Cone)]
+		[Selected(ID = SelecterPrimitive, Value = (int)ProcedualModelPrimitiveType.Cylinder)]
 		[Key(key = "PM_Depth")]
 		public Value.Float Depth { get; private set; } = new Value.Float(1.0f);
 
+		[Selected(ID = SelecterPrimitive, Value = (int)ProcedualModelPrimitiveType.Sphere)]
 		[Key(key = "PM_DepthMin")]
 		public Value.Float DepthMin { get; private set; } = new Value.Float(-1.0f);
 
+		[Selected(ID = SelecterPrimitive, Value = (int)ProcedualModelPrimitiveType.Sphere)]
 		[Key(key = "PM_DepthMax")]
 		public Value.Float DepthMax { get; private set; } = new Value.Float(1.0f);
+
+		public Value.Vector2D TiltNoiseFrequency { get; private set; } = new Value.Vector2D(1.0f, 1.0f);
+
+		public Value.Vector2D TiltNoiseOffset { get; private set; } = new Value.Vector2D(0.0f, 0.0f);
+
+		public Value.Vector2D TiltNoisePower { get; private set; } = new Value.Vector2D(0.0f, 0.0f);
+
+		public Value.Vector3D WaveNoiseFrequency { get; private set; } = new Value.Vector3D(1.0f, 1.0f, 1.0f);
+		public Value.Vector3D WaveNoiseOffset { get; private set; } = new Value.Vector3D(0.0f, 0.0f, 0.0f);
+		public Value.Vector3D WaveNoisePower { get; private set; } = new Value.Vector3D(0.0f, 0.0f, 0.0f);
+
+		public Value.Vector3D CurlNoiseFrequency { get; private set; } = new Value.Vector3D(1.0f, 1.0f, 1.0f);
+		public Value.Vector3D CurlNoiseOffset { get; private set; } = new Value.Vector3D(0.0f, 0.0f, 0.0f);
+		public Value.Vector3D CurlNoisePower { get; private set; } = new Value.Vector3D(0.0f, 0.0f, 0.0f);
+
 
 		public override bool Equals(object obj)
 		{
@@ -667,9 +728,19 @@ namespace Effekseer.Data
 			}
 			else if (Type.Value == ProcedualModelType.Ribbon)
 			{
+				if (CrossSection.Value != param.CrossSection.Value)
+					return false;
 				if (Rotate.Value != param.Rotate.Value)
 					return false;
 				if (Vertices.Value != param.Vertices.Value)
+					return false;
+				if (ScaleBottom.Value != param.ScaleBottom.Value)
+					return false;
+				if (ScaleTop.Value != param.ScaleTop.Value)
+					return false;
+				if (Noises.X.Value != param.Noises.X.Value)
+					return false;
+				if (Noises.Y.Value != param.Noises.Y.Value)
 					return false;
 				if (Count.Value != param.Count.Value)
 					return false;
@@ -713,6 +784,27 @@ namespace Effekseer.Data
 				throw new Exception();
 			}
 
+			if (!TiltNoiseFrequency.Equals(TiltNoiseFrequency))
+				return false;
+			if (!TiltNoiseOffset.Equals(TiltNoiseOffset))
+				return false;
+			if (!TiltNoisePower.Equals(TiltNoisePower))
+				return false;
+
+			if (!WaveNoiseFrequency.Equals(WaveNoiseFrequency))
+				return false;
+			if (!WaveNoiseOffset.Equals(WaveNoiseOffset))
+				return false;
+			if (!WaveNoisePower.Equals(WaveNoisePower))
+				return false;
+
+			if (!CurlNoiseFrequency.Equals(CurlNoiseFrequency))
+				return false;
+			if (!CurlNoiseOffset.Equals(CurlNoiseOffset))
+				return false;
+			if (!CurlNoisePower.Equals(CurlNoisePower))
+				return false;
+
 			return true;
 		}
 
@@ -720,54 +812,44 @@ namespace Effekseer.Data
 		{
 			var hash = 0;
 
-			hash = CombineHashCodes(new[] { hash, Type.Value.GetHashCode() });
+			hash = Utils.Misc.CombineHashCodes(new[] { hash, Type.Value.GetHashCode() });
 
 			if (Type.Value == ProcedualModelType.Mesh)
 			{
-				hash = CombineHashCodes(new[] { hash, AngleBeginEnd.X.Value.GetHashCode(), AngleBeginEnd.Y.Value.GetHashCode(), AngleDivision.Value.GetHashCode(), AxisDivision.Value.GetHashCode() });
+				hash = Utils.Misc.CombineHashCodes(new[] { hash, AngleBeginEnd.X.Value.GetHashCode(), AngleBeginEnd.Y.Value.GetHashCode(), AngleDivision.Value.GetHashCode(), AxisDivision.Value.GetHashCode() });
 			}
 			else if (Type.Value == ProcedualModelType.Ribbon)
 			{
-				hash = CombineHashCodes(new[] { hash, Rotate.Value.GetHashCode(), Vertices.Value.GetHashCode(), Count.Value.GetHashCode() });
+				hash = Utils.Misc.CombineHashCodes(new[] { hash, CrossSection.Value.GetHashCode(), Rotate.Value.GetHashCode(), Vertices.Value.GetHashCode(), ScaleBottom.Value.GetHashCode(), ScaleTop.Value.GetHashCode(), Noises.X.Value.GetHashCode(), Noises.Y.Value.GetHashCode(), Count.Value.GetHashCode() });
 			}
 			else
 			{
 				throw new Exception();
 			}
 
-			hash = CombineHashCodes(new[] { hash, PrimitiveType.Value.GetHashCode() });
+			hash = Utils.Misc.CombineHashCodes(new[] { hash, PrimitiveType.Value.GetHashCode() });
 
 			if (PrimitiveType.Value == ProcedualModelPrimitiveType.Sphere)
 			{
-				hash = CombineHashCodes(new[] { hash, DepthMin.Value.GetHashCode(), DepthMax.Value.GetHashCode(), Radius.Value.GetHashCode() });
+				hash = Utils.Misc.CombineHashCodes(new[] { hash, DepthMin.Value.GetHashCode(), DepthMax.Value.GetHashCode(), Radius.Value.GetHashCode() });
 			}
 			else if (PrimitiveType.Value == ProcedualModelPrimitiveType.Cone)
 			{
-				hash = CombineHashCodes(new[] { hash, Depth.Value.GetHashCode(), Radius.Value.GetHashCode() });
+				hash = Utils.Misc.CombineHashCodes(new[] { hash, Depth.Value.GetHashCode(), Radius.Value.GetHashCode() });
 			}
 			else if (PrimitiveType.Value == ProcedualModelPrimitiveType.Cylinder)
 			{
-				hash = CombineHashCodes(new[] { hash, Depth.Value.GetHashCode(), Radius.Value.GetHashCode(), Radius2.Value.GetHashCode() });
+				hash = Utils.Misc.CombineHashCodes(new[] { hash, Depth.Value.GetHashCode(), Radius.Value.GetHashCode(), Radius2.Value.GetHashCode() });
 			}
 			else
 			{
 				throw new Exception();
 			}
 
-			return hash;
-		}
 
-		/// <summary>
-		/// https://stackoverflow.com/questions/1646807/quick-and-simple-hash-code-combinations
-		/// </summary>
-		/// <param name="hashCodes"></param>
-		/// <returns></returns>
-		public static int CombineHashCodes(IEnumerable<int> hashCodes)
-		{
-			int hash = 5381;
-
-			foreach (var hashCode in hashCodes)
-				hash = ((hash << 5) + hash) ^ hashCode;
+			hash = Utils.Misc.CombineHashCodes(new[] { hash, TiltNoiseFrequency.GetValueHashCode(), TiltNoiseOffset.GetValueHashCode(), TiltNoisePower.GetValueHashCode() });
+			hash = Utils.Misc.CombineHashCodes(new[] { hash, WaveNoiseFrequency.GetValueHashCode(), WaveNoiseOffset.GetValueHashCode(), WaveNoisePower.GetValueHashCode() });
+			hash = Utils.Misc.CombineHashCodes(new[] { hash, CurlNoiseFrequency.GetValueHashCode(), CurlNoiseOffset.GetValueHashCode(), CurlNoisePower.GetValueHashCode() });
 
 			return hash;
 		}
