@@ -648,17 +648,18 @@ namespace Effekseer.Data
 		[Key(key = "PM_Vertices")]
 		public Value.Int Vertices { get; private set; } = new Value.Int(10);
 
-		[Selected(ID = SelecterType, Value = (int)ProcedualModelType.Ribbon)]
-		[Key(key = "PM_ScaleBottom")]
-		public Value.Float ScaleBottom { get; private set; } = new Value.Float(0.2f);
 
 		[Selected(ID = SelecterType, Value = (int)ProcedualModelType.Ribbon)]
 		[Key(key = "PM_ScaleTop")]
-		public Value.Float ScaleTop { get; private set; } = new Value.Float(0.2f);
+		public Value.Vector2D RibbonScales { get; private set; } = new Value.Vector2D(0.2f, 0.2f);
+
+		[Selected(ID = SelecterType, Value = (int)ProcedualModelType.Ribbon)]
+		[Key(key = "PM_ScaleTop")]
+		public Value.Vector2D RibbonAngles { get; private set; } = new Value.Vector2D(0.2f, 0.2f);
 
 		[Selected(ID = SelecterType, Value = (int)ProcedualModelType.Ribbon)]
 		[Key(key = "PM_Noises")]
-		public Value.Vector2D Noises { get; private set; } = new Value.Vector2D(0.0f, 0.0f);
+		public Value.Vector2D RibbonNoises { get; private set; } = new Value.Vector2D(0.0f, 0.0f);
 
 		[Selected(ID = SelecterType, Value = (int)ProcedualModelType.Ribbon)]
 		[Key(key = "PM_Count")]
@@ -734,13 +735,11 @@ namespace Effekseer.Data
 					return false;
 				if (Vertices.Value != param.Vertices.Value)
 					return false;
-				if (ScaleBottom.Value != param.ScaleBottom.Value)
+				if (!RibbonScales.ValueEquals(param.RibbonScales))
 					return false;
-				if (ScaleTop.Value != param.ScaleTop.Value)
+				if (!RibbonAngles.ValueEquals(param.RibbonAngles))
 					return false;
-				if (Noises.X.Value != param.Noises.X.Value)
-					return false;
-				if (Noises.Y.Value != param.Noises.Y.Value)
+				if (!RibbonNoises.ValueEquals(param.RibbonNoises))
 					return false;
 				if (Count.Value != param.Count.Value)
 					return false;
@@ -784,25 +783,25 @@ namespace Effekseer.Data
 				throw new Exception();
 			}
 
-			if (!TiltNoiseFrequency.Equals(TiltNoiseFrequency))
+			if (!TiltNoiseFrequency.ValueEquals(TiltNoiseFrequency))
 				return false;
-			if (!TiltNoiseOffset.Equals(TiltNoiseOffset))
+			if (!TiltNoiseOffset.ValueEquals(TiltNoiseOffset))
 				return false;
-			if (!TiltNoisePower.Equals(TiltNoisePower))
-				return false;
-
-			if (!WaveNoiseFrequency.Equals(WaveNoiseFrequency))
-				return false;
-			if (!WaveNoiseOffset.Equals(WaveNoiseOffset))
-				return false;
-			if (!WaveNoisePower.Equals(WaveNoisePower))
+			if (!TiltNoisePower.ValueEquals(TiltNoisePower))
 				return false;
 
-			if (!CurlNoiseFrequency.Equals(CurlNoiseFrequency))
+			if (!WaveNoiseFrequency.ValueEquals(WaveNoiseFrequency))
 				return false;
-			if (!CurlNoiseOffset.Equals(CurlNoiseOffset))
+			if (!WaveNoiseOffset.ValueEquals(WaveNoiseOffset))
 				return false;
-			if (!CurlNoisePower.Equals(CurlNoisePower))
+			if (!WaveNoisePower.ValueEquals(WaveNoisePower))
+				return false;
+
+			if (!CurlNoiseFrequency.ValueEquals(CurlNoiseFrequency))
+				return false;
+			if (!CurlNoiseOffset.ValueEquals(CurlNoiseOffset))
+				return false;
+			if (!CurlNoisePower.ValueEquals(CurlNoisePower))
 				return false;
 
 			return true;
@@ -820,7 +819,7 @@ namespace Effekseer.Data
 			}
 			else if (Type.Value == ProcedualModelType.Ribbon)
 			{
-				hash = Utils.Misc.CombineHashCodes(new[] { hash, CrossSection.Value.GetHashCode(), Rotate.Value.GetHashCode(), Vertices.Value.GetHashCode(), ScaleBottom.Value.GetHashCode(), ScaleTop.Value.GetHashCode(), Noises.X.Value.GetHashCode(), Noises.Y.Value.GetHashCode(), Count.Value.GetHashCode() });
+				hash = Utils.Misc.CombineHashCodes(new[] { hash, CrossSection.Value.GetHashCode(), Rotate.Value.GetHashCode(), Vertices.Value.GetHashCode(), RibbonScales.GetValueHashCode(), RibbonAngles.GetValueHashCode(), RibbonNoises.GetValueHashCode(), Count.Value.GetHashCode() });
 			}
 			else
 			{

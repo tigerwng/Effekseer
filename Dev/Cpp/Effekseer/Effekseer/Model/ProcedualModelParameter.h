@@ -99,8 +99,8 @@ struct ProcedualModelParameter
 			ProcedualModelCrossSectionType CrossSection;
 			float Rotate;
 			int Vertices;
-			float SizeBottom;
-			float SizeTop;
+			std::array<float, 2> RibbonSizes;
+			std::array<float, 2> RibbonAngles;
 			std::array<float, 2> RibbonNoises;
 			int Count;
 		} Ribbon;
@@ -172,12 +172,10 @@ struct ProcedualModelParameter
 			if (Ribbon.Vertices != rhs.Ribbon.Vertices)
 				return Ribbon.Vertices < rhs.Ribbon.Vertices;
 
-			if (Ribbon.SizeBottom != rhs.Ribbon.SizeBottom)
-				return Ribbon.SizeBottom < rhs.Ribbon.SizeBottom;
-
-			if (Ribbon.SizeTop != rhs.Ribbon.SizeTop)
-				return Ribbon.SizeTop < rhs.Ribbon.SizeTop;
-
+			if (Ribbon.RibbonSizes != rhs.Ribbon.RibbonSizes)
+				return Ribbon.RibbonSizes < rhs.Ribbon.RibbonSizes;
+			if (Ribbon.RibbonAngles != rhs.Ribbon.RibbonAngles)
+				return Ribbon.RibbonAngles < rhs.Ribbon.RibbonAngles;
 			if (Ribbon.RibbonNoises[0] != rhs.Ribbon.RibbonNoises[0])
 				return Ribbon.RibbonNoises[0] < rhs.Ribbon.RibbonNoises[0];
 
@@ -276,10 +274,9 @@ struct ProcedualModelParameter
 			reader.Read(Ribbon.CrossSection);
 			reader.Read(Ribbon.Rotate);
 			reader.Read(Ribbon.Vertices);
-			reader.Read(Ribbon.SizeBottom);
-			reader.Read(Ribbon.SizeTop);
-			reader.Read(Ribbon.RibbonNoises[0]);
-			reader.Read(Ribbon.RibbonNoises[1]);
+			reader.Read(Ribbon.RibbonSizes);
+			reader.Read(Ribbon.RibbonAngles);
+			reader.Read(Ribbon.RibbonNoises);
 			reader.Read(Ribbon.Count);
 		}
 		else

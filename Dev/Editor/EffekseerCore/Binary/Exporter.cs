@@ -721,10 +721,9 @@ namespace Effekseer.Binary
 						data.Add(((int)param.CrossSection.Value).GetBytes());
 						data.Add(param.Rotate.Value.GetBytes());
 						data.Add(param.Vertices.Value.GetBytes());
-						data.Add(param.ScaleBottom.Value.GetBytes());
-						data.Add(param.ScaleTop.Value.GetBytes());
-						data.Add(param.Noises.X.Value.GetBytes());
-						data.Add(param.Noises.Y.Value.GetBytes());
+						data.Add((byte[])param.RibbonScales);
+						data.Add((byte[])param.RibbonAngles);
+						data.Add((byte[])param.RibbonNoises);
 						data.Add(param.Count.Value.GetBytes());
 					}
 

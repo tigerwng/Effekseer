@@ -16,7 +16,6 @@ namespace Effekseer
 /*
 	memo
 	// kubire
-	// rot ribbon
 	// v color
 */
 
@@ -364,10 +363,9 @@ struct RotatedWireMeshGenerator
 	int Vertices;
 	int Count;
 
-	float SizeBottom = {};
-	float SizeTop = {};
-
 	std::array<float, 2> RibbonNoises;
+	std::array<float, 2> RibbonAngles;
+	std::array<float, 2> RibbonSizes;
 
 	std::function<Vec2f(float)> Rotator;
 	std::function<Vec3f(Vec3f)> Noise;
@@ -488,14 +486,22 @@ struct RotatedWireMeshGenerator
 			for (int32_t v = 0; v < vs.size(); v++)
 			{
 				const auto tangent = Vec3f::Cross(normals[v], binormals[v]).Normalize();
+				const auto normal = normals[v];
 
 				const auto percent = v / static_cast<float>(vs.size() - 1);
 
-				const auto scale = (SizeTop - SizeBottom) * percent + SizeBottom;
+				const auto scale = (RibbonSizes[1] - RibbonSizes[0]) * percent + RibbonSizes[0];
+				const auto angle = ((RibbonAngles[1] - RibbonAngles[0]) * percent + RibbonAngles[0]) / 180.0f * EFK_PI;
+
+				const auto c = cosf(angle);
+				const auto s = sinf(angle);
+
+				const auto rtangent = tangent * c + normal * s;
+				const auto rnormal = -tangent * s + normal * c;
 
 				for (size_t i = 0; i < vertexPoses.size(); i++)
 				{
-					ribbon.Vertexes[v * vertexPoses.size() + i].Position = vs[v] + (tangent * vertexPoses[i].GetX() + binormals[v] * vertexPoses[i].GetY() + normals[v] * vertexPoses[i].GetZ()) * scale;
+					ribbon.Vertexes[v * vertexPoses.size() + i].Position = vs[v] + (rtangent * vertexPoses[i].GetX() + binormals[v] * vertexPoses[i].GetY() + rnormal * vertexPoses[i].GetZ()) * scale;
 					ribbon.Vertexes[v * vertexPoses.size() + i].UV = Vec2f(edgeUVs[i], v / static_cast<float>(vs.size() - 1));
 				}
 			}
@@ -639,8 +645,8 @@ Model* ProcedualModelGenerator::Generate(const ProcedualModelParameter* paramete
 		generator.Vertices = parameter->Ribbon.Vertices;
 		generator.Rotate = parameter->Ribbon.Rotate;
 		generator.Count = parameter->Ribbon.Count;
-		generator.SizeBottom = parameter->Ribbon.SizeBottom;
-		generator.SizeTop = parameter->Ribbon.SizeTop;
+		generator.RibbonSizes = parameter->Ribbon.RibbonSizes;
+		generator.RibbonAngles = parameter->Ribbon.RibbonAngles;
 		generator.RibbonNoises = parameter->Ribbon.RibbonNoises;
 
 		auto generated = generator.Generate(randObj);
