@@ -759,6 +759,12 @@ namespace Effekseer.Binary
 					data.Add((byte[])param.CurlNoiseOffset);
 					data.Add((byte[])param.CurlNoisePower);
 
+					data.Add((byte[])param.ColorLeft);
+					data.Add((byte[])param.ColorCenter);
+					data.Add((byte[])param.ColorRight);
+					data.Add((byte[])param.ColorLeftMiddle);
+					data.Add((byte[])param.ColorCenterMiddle);
+					data.Add((byte[])param.ColorRightMiddle);
 				}
 			}
 

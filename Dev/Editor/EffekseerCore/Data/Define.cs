@@ -706,6 +706,17 @@ namespace Effekseer.Data
 		public Value.Vector3D CurlNoiseOffset { get; private set; } = new Value.Vector3D(0.0f, 0.0f, 0.0f);
 		public Value.Vector3D CurlNoisePower { get; private set; } = new Value.Vector3D(0.0f, 0.0f, 0.0f);
 
+		public Value.Color ColorLeft { get; private set; } = new Value.Color(255, 255, 255, 255);
+
+		public Value.Color ColorCenter { get; private set; } = new Value.Color(255, 255, 255, 255);
+
+		public Value.Color ColorRight { get; private set; } = new Value.Color(255, 255, 255, 255);
+
+		public Value.Color ColorLeftMiddle { get; private set; } = new Value.Color(255, 255, 255, 255);
+
+		public Value.Color ColorCenterMiddle { get; private set; } = new Value.Color(255, 255, 255, 255);
+
+		public Value.Color ColorRightMiddle { get; private set; } = new Value.Color(255, 255, 255, 255);
 
 		public override bool Equals(object obj)
 		{
@@ -783,27 +794,39 @@ namespace Effekseer.Data
 				throw new Exception();
 			}
 
-			if (!TiltNoiseFrequency.ValueEquals(TiltNoiseFrequency))
+			if (!TiltNoiseFrequency.ValueEquals(param.TiltNoiseFrequency))
 				return false;
-			if (!TiltNoiseOffset.ValueEquals(TiltNoiseOffset))
+			if (!TiltNoiseOffset.ValueEquals(param.TiltNoiseOffset))
 				return false;
-			if (!TiltNoisePower.ValueEquals(TiltNoisePower))
-				return false;
-
-			if (!WaveNoiseFrequency.ValueEquals(WaveNoiseFrequency))
-				return false;
-			if (!WaveNoiseOffset.ValueEquals(WaveNoiseOffset))
-				return false;
-			if (!WaveNoisePower.ValueEquals(WaveNoisePower))
+			if (!TiltNoisePower.ValueEquals(param.TiltNoisePower))
 				return false;
 
-			if (!CurlNoiseFrequency.ValueEquals(CurlNoiseFrequency))
+			if (!WaveNoiseFrequency.ValueEquals(param.WaveNoiseFrequency))
 				return false;
-			if (!CurlNoiseOffset.ValueEquals(CurlNoiseOffset))
+			if (!WaveNoiseOffset.ValueEquals(param.WaveNoiseOffset))
 				return false;
-			if (!CurlNoisePower.ValueEquals(CurlNoisePower))
+			if (!WaveNoisePower.ValueEquals(param.WaveNoisePower))
 				return false;
 
+			if (!CurlNoiseFrequency.ValueEquals(param.CurlNoiseFrequency))
+				return false;
+			if (!CurlNoiseOffset.ValueEquals(param.CurlNoiseOffset))
+				return false;
+			if (!CurlNoisePower.ValueEquals(param.CurlNoisePower))
+				return false;
+
+			if (!ColorLeft.ValueEquals(param.ColorLeft))
+				return false;
+			if (!ColorCenter.ValueEquals(param.ColorCenter))
+				return false;
+			if (!ColorRight.ValueEquals(param.ColorRight))
+				return false;
+			if (!ColorLeftMiddle.ValueEquals(param.ColorLeftMiddle))
+				return false;
+			if (!ColorCenterMiddle.ValueEquals(param.ColorCenterMiddle))
+				return false;
+			if (!ColorRightMiddle.ValueEquals(param.ColorRightMiddle))
+				return false;
 			return true;
 		}
 
@@ -849,6 +872,9 @@ namespace Effekseer.Data
 			hash = Utils.Misc.CombineHashCodes(new[] { hash, TiltNoiseFrequency.GetValueHashCode(), TiltNoiseOffset.GetValueHashCode(), TiltNoisePower.GetValueHashCode() });
 			hash = Utils.Misc.CombineHashCodes(new[] { hash, WaveNoiseFrequency.GetValueHashCode(), WaveNoiseOffset.GetValueHashCode(), WaveNoisePower.GetValueHashCode() });
 			hash = Utils.Misc.CombineHashCodes(new[] { hash, CurlNoiseFrequency.GetValueHashCode(), CurlNoiseOffset.GetValueHashCode(), CurlNoisePower.GetValueHashCode() });
+
+			hash = Utils.Misc.CombineHashCodes(new[] { hash, ColorLeft.GetValueHashCode(), ColorCenter.GetValueHashCode(), ColorRight.GetValueHashCode() });
+			hash = Utils.Misc.CombineHashCodes(new[] { hash, ColorLeftMiddle.GetValueHashCode(), ColorCenterMiddle.GetValueHashCode(), ColorRightMiddle.GetValueHashCode() });
 
 			return hash;
 		}
