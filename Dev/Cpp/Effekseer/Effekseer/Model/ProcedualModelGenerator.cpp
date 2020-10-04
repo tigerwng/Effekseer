@@ -16,7 +16,6 @@ namespace Effekseer
 /*
 	memo
 	// kubire
-	// v color
 */
 
 struct ProcedualMeshVertex
@@ -25,7 +24,7 @@ struct ProcedualMeshVertex
 	Vec3f Normal;
 	Vec3f Tangent;
 	Vec2f UV;
-	std::array<float, 4> VColor;
+	Color VColor;
 };
 
 struct ProcedualMeshFace
@@ -171,14 +170,86 @@ static void CalculateNormal(ProcedualMesh& mesh)
 	}
 }
 
-static void CalculateVertexColor(ProcedualMesh& mesh)
+static void CalculateVertexColor(ProcedualMesh& mesh,
+								 const Color& ColorLeft,
+								 const Color& ColorCenter,
+								 const Color& ColorRight,
+								 const Color& ColorLeftMiddle,
+								 const Color& ColorCenterMiddle,
+								 const Color& ColorRightMiddle)
 {
+	auto calcColor = [&](float u, float v) -> Color {
+		::Effekseer::Color leftColor;
+		::Effekseer::Color centerColor;
+		::Effekseer::Color rightColor;
+
+		if (v < 0.5f)
+		{
+			float l = v;
+			l = l * 2.0f;
+
+			leftColor.R = (uint8_t)Effekseer::Clamp(ColorLeft.R + (ColorLeftMiddle.R - ColorLeft.R) * l, 255, 0);
+			leftColor.G = (uint8_t)Effekseer::Clamp(ColorLeft.G + (ColorLeftMiddle.G - ColorLeft.G) * l, 255, 0);
+			leftColor.B = (uint8_t)Effekseer::Clamp(ColorLeft.B + (ColorLeftMiddle.B - ColorLeft.B) * l, 255, 0);
+			leftColor.A = (uint8_t)Effekseer::Clamp(ColorLeft.A + (ColorLeftMiddle.A - ColorLeft.A) * l, 255, 0);
+
+			centerColor.R =
+				(uint8_t)Effekseer::Clamp(ColorCenter.R + (ColorCenterMiddle.R - ColorCenter.R) * l, 255, 0);
+			centerColor.G =
+				(uint8_t)Effekseer::Clamp(ColorCenter.G + (ColorCenterMiddle.G - ColorCenter.G) * l, 255, 0);
+			centerColor.B =
+				(uint8_t)Effekseer::Clamp(ColorCenter.B + (ColorCenterMiddle.B - ColorCenter.B) * l, 255, 0);
+			centerColor.A =
+				(uint8_t)Effekseer::Clamp(ColorCenter.A + (ColorCenterMiddle.A - ColorCenter.A) * l, 255, 0);
+
+			rightColor.R =
+				(uint8_t)Effekseer::Clamp(ColorRight.R + (ColorRightMiddle.R - ColorRight.R) * l, 255, 0);
+			rightColor.G =
+				(uint8_t)Effekseer::Clamp(ColorRight.G + (ColorRightMiddle.G - ColorRight.G) * l, 255, 0);
+			rightColor.B =
+				(uint8_t)Effekseer::Clamp(ColorRight.B + (ColorRightMiddle.B - ColorRight.B) * l, 255, 0);
+			rightColor.A =
+				(uint8_t)Effekseer::Clamp(ColorRight.A + (ColorRightMiddle.A - ColorRight.A) * l, 255, 0);
+		}
+		else
+		{
+			float l = v;
+			l = 1.0f - (l * 2.0f - 1.0f);
+
+			leftColor.R = (uint8_t)Effekseer::Clamp(ColorLeft.R + (ColorLeftMiddle.R - ColorLeft.R) * l, 255, 0);
+			leftColor.G = (uint8_t)Effekseer::Clamp(ColorLeft.G + (ColorLeftMiddle.G - ColorLeft.G) * l, 255, 0);
+			leftColor.B = (uint8_t)Effekseer::Clamp(ColorLeft.B + (ColorLeftMiddle.B - ColorLeft.B) * l, 255, 0);
+			leftColor.A = (uint8_t)Effekseer::Clamp(ColorLeft.A + (ColorLeftMiddle.A - ColorLeft.A) * l, 255, 0);
+
+			centerColor.R =
+				(uint8_t)Effekseer::Clamp(ColorCenter.R + (ColorCenterMiddle.R - ColorCenter.R) * l, 255, 0);
+			centerColor.G =
+				(uint8_t)Effekseer::Clamp(ColorCenter.G + (ColorCenterMiddle.G - ColorCenter.G) * l, 255, 0);
+			centerColor.B =
+				(uint8_t)Effekseer::Clamp(ColorCenter.B + (ColorCenterMiddle.B - ColorCenter.B) * l, 255, 0);
+			centerColor.A =
+				(uint8_t)Effekseer::Clamp(ColorCenter.A + (ColorCenterMiddle.A - ColorCenter.A) * l, 255, 0);
+
+			rightColor.R =
+				(uint8_t)Effekseer::Clamp(ColorRight.R + (ColorRightMiddle.R - ColorRight.R) * l, 255, 0);
+			rightColor.G =
+				(uint8_t)Effekseer::Clamp(ColorRight.G + (ColorRightMiddle.G - ColorRight.G) * l, 255, 0);
+			rightColor.B =
+				(uint8_t)Effekseer::Clamp(ColorRight.B + (ColorRightMiddle.B - ColorRight.B) * l, 255, 0);
+			rightColor.A =
+				(uint8_t)Effekseer::Clamp(ColorRight.A + (ColorRightMiddle.A - ColorRight.A) * l, 255, 0);
+		}
+
+		if (u < 0.5f)
+		{
+			return Color::Lerp(leftColor, centerColor, u * 2.0f);
+		}
+		return Color::Lerp(centerColor, rightColor, (u - 0.5f) * 2.0f);
+	};
+
 	for (auto& v : mesh.Vertexes)
 	{
-		v.VColor[0] = 1.0f;
-		v.VColor[1] = 1.0f;
-		v.VColor[2] = 1.0f;
-		v.VColor[3] = (abs(v.UV.GetX() - 0.5f) * 2.0f) * (abs(v.UV.GetY() - 0.5f) * 2.0f);
+		v.VColor = calcColor(v.UV.GetX(), v.UV.GetY());
 	}
 }
 
@@ -198,7 +269,7 @@ static Model* ConvertMeshToModel(const ProcedualMesh& mesh)
 		vs[i].UV = ToStruct(mesh.Vertexes[i].UV);
 		Vector3D::Cross(vs[i].Binormal, vs[i].Normal, vs[i].Tangent);
 		Vector3D::Normal(vs[i].Binormal, vs[i].Binormal);
-		vs[i].VColor = Color(mesh.Vertexes[i].VColor[0] * 255, mesh.Vertexes[i].VColor[1] * 255, mesh.Vertexes[i].VColor[2] * 255, mesh.Vertexes[i].VColor[3] * 255);
+		vs[i].VColor = mesh.Vertexes[i].VColor;
 	}
 
 	for (size_t i = 0; i < faces.size(); i++)
@@ -633,7 +704,7 @@ Model* ProcedualModelGenerator::Generate(const ProcedualModelParameter* paramete
 		generator.IsConnected = isConnected;
 		auto generated = generator.Generate(parameter->Mesh.AngleDivision, parameter->Mesh.DepthDivision);
 		CalculateNormal(generated);
-		CalculateVertexColor(generated);
+		CalculateVertexColor(generated, parameter->ColorLeft, parameter->ColorCenter, parameter->ColorRight, parameter->ColorLeftMiddle, parameter->ColorCenterMiddle, parameter->ColorRightMiddle);
 		return ConvertMeshToModel(generated);
 	}
 	else if (parameter->Type == ProcedualModelType::Ribbon)
@@ -652,7 +723,7 @@ Model* ProcedualModelGenerator::Generate(const ProcedualModelParameter* paramete
 		auto generated = generator.Generate(randObj);
 
 		CalculateNormal(generated);
-		CalculateVertexColor(generated);
+		CalculateVertexColor(generated, parameter->ColorLeft, parameter->ColorCenter, parameter->ColorRight, parameter->ColorLeftMiddle, parameter->ColorCenterMiddle, parameter->ColorRightMiddle);
 		return ConvertMeshToModel(generated);
 	}
 

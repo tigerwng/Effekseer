@@ -1,6 +1,7 @@
 #ifndef __EFFEKSEER_PROCEDUAL_MODEL_PARAMETER_H__
 #define __EFFEKSEER_PROCEDUAL_MODEL_PARAMETER_H__
 
+#include "../Effekseer.Color.h"
 #include "../Utils/Effekseer.BinaryReader.h"
 #include <stdint.h>
 #include <stdio.h>
@@ -85,7 +86,8 @@ struct ProcedualModelParameter
 	ProcedualModelType Type;
 	ProcedualModelPrimitiveType PrimitiveType;
 
-	union {
+	union
+	{
 		struct
 		{
 			float AngleBegin;
@@ -106,7 +108,8 @@ struct ProcedualModelParameter
 		} Ribbon;
 	};
 
-	union {
+	union
+	{
 		struct
 		{
 			float Radius;
@@ -139,6 +142,13 @@ struct ProcedualModelParameter
 	std::array<float, 3> CurlNoiseFrequency = {};
 	std::array<float, 3> CurlNoiseOffset = {};
 	std::array<float, 3> CurlNoisePower = {};
+
+	Color ColorLeft;
+	Color ColorCenter;
+	Color ColorRight;
+	Color ColorLeftMiddle;
+	Color ColorCenterMiddle;
+	Color ColorRightMiddle;
 
 	bool operator<(const ProcedualModelParameter& rhs) const
 	{
@@ -254,6 +264,24 @@ struct ProcedualModelParameter
 		if (CurlNoisePower != rhs.CurlNoisePower)
 			return CurlNoisePower < rhs.CurlNoisePower;
 
+		if (ColorLeft != rhs.ColorLeft)
+			return ColorLeft < rhs.ColorLeft;
+
+		if (ColorCenter != rhs.ColorCenter)
+			return ColorCenter < rhs.ColorCenter;
+
+		if (ColorRight != rhs.ColorRight)
+			return ColorRight < rhs.ColorRight;
+
+		if (ColorLeftMiddle != rhs.ColorLeftMiddle)
+			return ColorLeftMiddle < rhs.ColorLeftMiddle;
+
+		if (ColorCenterMiddle != rhs.ColorCenterMiddle)
+			return ColorCenterMiddle < rhs.ColorCenterMiddle;
+
+		if (ColorRightMiddle != rhs.ColorRightMiddle)
+			return ColorRightMiddle < rhs.ColorRightMiddle;
+
 		return false;
 	}
 
@@ -315,6 +343,13 @@ struct ProcedualModelParameter
 		reader.Read(CurlNoiseFrequency);
 		reader.Read(CurlNoiseOffset);
 		reader.Read(CurlNoisePower);
+
+		reader.Read(ColorLeft);
+		reader.Read(ColorCenter);
+		reader.Read(ColorRight);
+		reader.Read(ColorLeftMiddle);
+		reader.Read(ColorCenterMiddle);
+		reader.Read(ColorRightMiddle);
 
 		return true;
 	}
