@@ -606,13 +606,17 @@ namespace Effekseer.Data
 		Cone,
 		[Key(key = "ProcedualModelPrimitiveType_Cylinder")]
 		Cylinder,
+		[Key(key = "ProcedualModelPrimitiveType_Spline")]
 		Spline3,
 	}
 
 	public enum ProcedualModelCrossSectionType : int
 	{
+		[Key(key = "ProcedualModelCrossSectionType_Plane")]
 		Plane,
+		[Key(key = "ProcedualModelCrossSectionType_Cross")]
 		Cross,
+		[Key(key = "ProcedualModelCrossSectionType_Point")]
 		Point,
 	}
 
@@ -693,15 +697,19 @@ namespace Effekseer.Data
 		[Key(key = "PM_DepthMax")]
 		public Value.Float DepthMax { get; private set; } = new Value.Float(1.0f);
 
+		[Key(key = "PM_Point1")]
 		[Selected(ID = SelecterPrimitive, Value = (int)ProcedualModelPrimitiveType.Spline3)]
 		public Value.Vector2D Point1 { get; private set; } = new Value.Vector2D(1.0f, 0.0f);
 
+		[Key(key = "PM_Point2")]
 		[Selected(ID = SelecterPrimitive, Value = (int)ProcedualModelPrimitiveType.Spline3)]
 		public Value.Vector2D Point2 { get; private set; } = new Value.Vector2D(1.0f, 0.5f);
 
+		[Key(key = "PM_Point3")]
 		[Selected(ID = SelecterPrimitive, Value = (int)ProcedualModelPrimitiveType.Spline3)]
 		public Value.Vector2D Point3 { get; private set; } = new Value.Vector2D(1.0f, 1.0f);
 
+		[Key(key = "PM_Point4")]
 		[Selected(ID = SelecterPrimitive, Value = (int)ProcedualModelPrimitiveType.Spline3)]
 		public Value.Vector2D Point4 { get; private set; } = new Value.Vector2D(1.0f, 2.0f);
 

@@ -39,6 +39,11 @@ ProcedualModelType_Ribbon_Name,Ribbon
 ProcedualModelPrimitiveType_Sphere_Name,Sphere
 ProcedualModelPrimitiveType_Cone_Name,Cone
 ProcedualModelPrimitiveType_Cylinder_Name,Cylinder
+ProcedualModelPrimitiveType_Spline_Name,Spline
+
+ProcedualModelCrossSectionType_Plane_Name,Plane
+ProcedualModelCrossSectionType_Cross_Name,Cross
+ProcedualModelCrossSectionType_Point_Name,Point
 
 PM_Type_Name,Type
 PM_AngleBeginEnd_Name,Region(Angle)
@@ -54,3 +59,9 @@ PM_Radius2_Name,Radius2
 PM_Depth_Name,Depth
 PM_DepthMin_Name,Depth(Bottom)
 PM_DepthMax_Name,Depth(Top)
+
+PM_Point1_Name,Point1
+PM_Point2_Name,Point2
+PM_Point3_Name,Point3
+PM_Point4_Name,Point4
+
