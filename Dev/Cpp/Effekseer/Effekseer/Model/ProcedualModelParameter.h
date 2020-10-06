@@ -72,6 +72,7 @@ enum class ProcedualModelPrimitiveType : int32_t
 	Sphere,
 	Cone,
 	Cylinder,
+	Spline3,
 };
 
 enum class ProcedualModelCrossSectionType : int32_t
@@ -86,8 +87,7 @@ struct ProcedualModelParameter
 	ProcedualModelType Type;
 	ProcedualModelPrimitiveType PrimitiveType;
 
-	union
-	{
+	union {
 		struct
 		{
 			float AngleBegin;
@@ -108,8 +108,7 @@ struct ProcedualModelParameter
 		} Ribbon;
 	};
 
-	union
-	{
+	union {
 		struct
 		{
 			float Radius;
@@ -129,6 +128,14 @@ struct ProcedualModelParameter
 			float Radius2;
 			float Depth;
 		} Cylinder;
+
+		struct
+		{
+			std::array<float, 2> Point1;
+			std::array<float, 2> Point2;
+			std::array<float, 2> Point3;
+			std::array<float, 2> Point4;
+		} Spline3;
 	};
 
 	std::array<float, 2> TiltNoiseFrequency = {};
@@ -232,6 +239,20 @@ struct ProcedualModelParameter
 			if (Cylinder.Depth != rhs.Cylinder.Depth)
 				return Cylinder.Depth < rhs.Cylinder.Depth;
 		}
+		else if (PrimitiveType == ProcedualModelPrimitiveType::Spline3)
+		{
+			if (Spline3.Point1 != rhs.Spline3.Point1)
+				return Spline3.Point1 < rhs.Spline3.Point1;
+
+			if (Spline3.Point2 != rhs.Spline3.Point2)
+				return Spline3.Point2 < rhs.Spline3.Point2;
+
+			if (Spline3.Point3 != rhs.Spline3.Point3)
+				return Spline3.Point3 < rhs.Spline3.Point3;
+
+			if (Spline3.Point4 != rhs.Spline3.Point4)
+				return Spline3.Point4 < rhs.Spline3.Point4;
+		}
 		else
 		{
 			assert(0);
@@ -330,6 +351,13 @@ struct ProcedualModelParameter
 			reader.Read(Cylinder.Radius1);
 			reader.Read(Cylinder.Radius2);
 			reader.Read(Cylinder.Depth);
+		}
+		else if (PrimitiveType == ProcedualModelPrimitiveType::Spline3)
+		{
+			reader.Read(Spline3.Point1);
+			reader.Read(Spline3.Point2);
+			reader.Read(Spline3.Point3);
+			reader.Read(Spline3.Point4);
 		}
 
 		reader.Read(TiltNoiseFrequency);

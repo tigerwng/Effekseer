@@ -606,6 +606,7 @@ namespace Effekseer.Data
 		Cone,
 		[Key(key = "ProcedualModelPrimitiveType_Cylinder")]
 		Cylinder,
+		Spline3,
 	}
 
 	public enum ProcedualModelCrossSectionType : int
@@ -630,11 +631,11 @@ namespace Effekseer.Data
 
 		[Selected(ID = SelecterType, Value = (int)ProcedualModelType.Mesh)]
 		[Key(key = "PM_AngleDivision")]
-		public Value.Int AngleDivision { get; private set; } = new Value.Int(10);
+		public Value.Int AngleDivision { get; private set; } = new Value.Int(10, int.MaxValue, 2, 1);
 
 		[Selected(ID = SelecterType, Value = (int)ProcedualModelType.Mesh)]
 		[Key(key = "PM_AxisDivision")]
-		public Value.Int AxisDivision { get; private set; } = new Value.Int(10);
+		public Value.Int AxisDivision { get; private set; } = new Value.Int(10, int.MaxValue, 2, 1);
 
 		[Selected(ID = SelecterType, Value = (int)ProcedualModelType.Ribbon)]
 		[Key(key = "PM_CrossSection")]
@@ -646,12 +647,12 @@ namespace Effekseer.Data
 
 		[Selected(ID = SelecterType, Value = (int)ProcedualModelType.Ribbon)]
 		[Key(key = "PM_Vertices")]
-		public Value.Int Vertices { get; private set; } = new Value.Int(10);
+		public Value.Int Vertices { get; private set; } = new Value.Int(10, int.MaxValue, 2, 1);
 
 
 		[Selected(ID = SelecterType, Value = (int)ProcedualModelType.Ribbon)]
 		[Key(key = "PM_ScaleTop")]
-		public Value.Vector2D RibbonScales { get; private set; } = new Value.Vector2D(0.2f, 0.2f);
+		public Value.Vector2D RibbonScales { get; private set; } = new Value.Vector2D(0.2f, 0.2f, x_step: 0.01f, y_step: 0.01f);
 
 		[Selected(ID = SelecterType, Value = (int)ProcedualModelType.Ribbon)]
 		[Key(key = "PM_ScaleTop")]
@@ -663,7 +664,7 @@ namespace Effekseer.Data
 
 		[Selected(ID = SelecterType, Value = (int)ProcedualModelType.Ribbon)]
 		[Key(key = "PM_Count")]
-		public Value.Int Count { get; private set; } = new Value.Int(2);
+		public Value.Int Count { get; private set; } = new Value.Int(2, int.MaxValue, 1);
 
 		[Selector(ID = SelecterPrimitive)]
 		[Key(key = "PM_PrimitiveType")]
@@ -692,19 +693,31 @@ namespace Effekseer.Data
 		[Key(key = "PM_DepthMax")]
 		public Value.Float DepthMax { get; private set; } = new Value.Float(1.0f);
 
-		public Value.Vector2D TiltNoiseFrequency { get; private set; } = new Value.Vector2D(1.0f, 1.0f);
+		[Selected(ID = SelecterPrimitive, Value = (int)ProcedualModelPrimitiveType.Spline3)]
+		public Value.Vector2D Point1 { get; private set; } = new Value.Vector2D(1.0f, 0.0f);
 
-		public Value.Vector2D TiltNoiseOffset { get; private set; } = new Value.Vector2D(0.0f, 0.0f);
+		[Selected(ID = SelecterPrimitive, Value = (int)ProcedualModelPrimitiveType.Spline3)]
+		public Value.Vector2D Point2 { get; private set; } = new Value.Vector2D(1.0f, 0.5f);
 
-		public Value.Vector2D TiltNoisePower { get; private set; } = new Value.Vector2D(0.0f, 0.0f);
+		[Selected(ID = SelecterPrimitive, Value = (int)ProcedualModelPrimitiveType.Spline3)]
+		public Value.Vector2D Point3 { get; private set; } = new Value.Vector2D(1.0f, 1.0f);
 
-		public Value.Vector3D WaveNoiseFrequency { get; private set; } = new Value.Vector3D(1.0f, 1.0f, 1.0f);
-		public Value.Vector3D WaveNoiseOffset { get; private set; } = new Value.Vector3D(0.0f, 0.0f, 0.0f);
-		public Value.Vector3D WaveNoisePower { get; private set; } = new Value.Vector3D(0.0f, 0.0f, 0.0f);
+		[Selected(ID = SelecterPrimitive, Value = (int)ProcedualModelPrimitiveType.Spline3)]
+		public Value.Vector2D Point4 { get; private set; } = new Value.Vector2D(1.0f, 2.0f);
 
-		public Value.Vector3D CurlNoiseFrequency { get; private set; } = new Value.Vector3D(1.0f, 1.0f, 1.0f);
-		public Value.Vector3D CurlNoiseOffset { get; private set; } = new Value.Vector3D(0.0f, 0.0f, 0.0f);
-		public Value.Vector3D CurlNoisePower { get; private set; } = new Value.Vector3D(0.0f, 0.0f, 0.0f);
+		public Value.Vector2D TiltNoiseFrequency { get; private set; } = new Value.Vector2D(1.0f, 1.0f, x_step: 0.01f, y_step: 0.01f);
+
+		public Value.Vector2D TiltNoiseOffset { get; private set; } = new Value.Vector2D(0.0f, 0.0f, x_step: 0.01f, y_step: 0.01f);
+
+		public Value.Vector2D TiltNoisePower { get; private set; } = new Value.Vector2D(0.0f, 0.0f, x_step: 0.01f, y_step: 0.01f);
+
+		public Value.Vector3D WaveNoiseFrequency { get; private set; } = new Value.Vector3D(1.0f, 1.0f, 1.0f, x_step: 0.01f, y_step: 0.01f, z_step:0.01f);
+		public Value.Vector3D WaveNoiseOffset { get; private set; } = new Value.Vector3D(0.0f, 0.0f, 0.0f, x_step: 0.01f, y_step: 0.01f, z_step: 0.01f);
+		public Value.Vector3D WaveNoisePower { get; private set; } = new Value.Vector3D(0.0f, 0.0f, 0.0f, x_step: 0.01f, y_step: 0.01f, z_step: 0.01f);
+
+		public Value.Vector3D CurlNoiseFrequency { get; private set; } = new Value.Vector3D(1.0f, 1.0f, 1.0f, x_step: 0.01f, y_step: 0.01f, z_step: 0.01f);
+		public Value.Vector3D CurlNoiseOffset { get; private set; } = new Value.Vector3D(0.0f, 0.0f, 0.0f, x_step: 0.01f, y_step: 0.01f, z_step: 0.01f);
+		public Value.Vector3D CurlNoisePower { get; private set; } = new Value.Vector3D(0.0f, 0.0f, 0.0f, x_step: 0.01f, y_step: 0.01f, z_step: 0.01f);
 
 		public Value.Color ColorLeft { get; private set; } = new Value.Color(255, 255, 255, 255);
 
@@ -764,7 +777,7 @@ namespace Effekseer.Data
 			if (PrimitiveType.Value != param.PrimitiveType.Value)
 				return false;
 
-			if(PrimitiveType.Value == ProcedualModelPrimitiveType.Sphere)
+			if (PrimitiveType.Value == ProcedualModelPrimitiveType.Sphere)
 			{
 				if (Radius.Value != param.Radius.Value)
 					return false;
@@ -787,6 +800,17 @@ namespace Effekseer.Data
 				if (Radius2.Value != param.Radius2.Value)
 					return false;
 				if (Depth.Value != param.Depth.Value)
+					return false;
+			}
+			else if (PrimitiveType.Value == ProcedualModelPrimitiveType.Spline3)
+			{
+				if (!Point1.ValueEquals(param.Point1))
+					return false;
+				if (!Point2.ValueEquals(param.Point2))
+					return false;
+				if (!Point3.ValueEquals(param.Point3))
+					return false;
+				if (!Point4.ValueEquals(param.Point4))
 					return false;
 			}
 			else
@@ -862,6 +886,10 @@ namespace Effekseer.Data
 			else if (PrimitiveType.Value == ProcedualModelPrimitiveType.Cylinder)
 			{
 				hash = Utils.Misc.CombineHashCodes(new[] { hash, Depth.Value.GetHashCode(), Radius.Value.GetHashCode(), Radius2.Value.GetHashCode() });
+			}
+			else if (PrimitiveType.Value == ProcedualModelPrimitiveType.Spline3)
+			{
+				hash = Utils.Misc.CombineHashCodes(new[] { hash, Point1.GetValueHashCode(), Point2.GetValueHashCode(), Point3.GetValueHashCode(), Point4.GetValueHashCode() });
 			}
 			else
 			{

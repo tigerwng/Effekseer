@@ -5,6 +5,7 @@
 #include "../Noise/PerlinNoise.h"
 #include "../SIMD/Effekseer.SIMDUtils.h"
 #include "ProcedualModelParameter.h"
+#include "SplineGenerator.h"
 
 #define _USE_MATH_DEFINES
 #include <cmath>
@@ -12,11 +13,6 @@
 
 namespace Effekseer
 {
-
-/*
-	memo
-	// kubire
-*/
 
 struct ProcedualMeshVertex
 {
@@ -327,6 +323,57 @@ struct RotatorCylinder
 		value = Clamp(value, 1.0f, 0.0f);
 		float axisPos = Depth * value;
 		return Vec2f((Radius2 - Radius1) / Depth * axisPos + Radius1, axisPos);
+	}
+};
+
+struct RotatorSpline3
+{
+	std::array<float, 2> Point1;
+	std::array<float, 2> Point2;
+	std::array<float, 2> Point3;
+	std::array<float, 2> Point4;
+
+	SplineGenerator generator;
+	std::vector<float> distances_;
+	float sumDistance_ = 0.0f;
+
+	void Calculate()
+	{
+		generator.AddVertex({Point1[0], Point1[1], 0.0f});
+		generator.AddVertex({Point2[0], Point2[1], 0.0f});
+		generator.AddVertex({Point3[0], Point3[1], 0.0f});
+		generator.AddVertex({Point4[0], Point4[1], 0.0f});
+		generator.Calculate();
+
+		distances_.emplace_back((Vec2f(Point2) - Vec2f(Point1)).Length());
+		distances_.emplace_back((Vec2f(Point3) - Vec2f(Point2)).Length());
+		distances_.emplace_back((Vec2f(Point4) - Vec2f(Point3)).Length());
+
+		sumDistance_ = 0.0f;
+		for (auto d : distances_)
+		{
+			sumDistance_ += d;
+		}
+	}
+
+	Vec2f GetPosition(float value) const
+	{
+		value = Clamp(value, 1.0f, 0.0f);
+
+		auto distance = sumDistance_ * value;
+
+		for (size_t i = 0; i < distances_.size(); i++)
+		{
+			if (distance <= distances_[i])
+			{
+				value = i + distance / distances_[i];
+				return Vec2f(generator.GetValue(value).GetX(), generator.GetValue(value).GetY());
+			}
+
+			distance -= distances_[i];
+		}
+
+		return Vec2f(generator.GetValue(distances_.size()).GetX(), generator.GetValue(distances_.size()).GetY());
 	}
 };
 
@@ -657,6 +704,19 @@ Model* ProcedualModelGenerator::Generate(const ProcedualModelParameter* paramete
 		rotator.Radius1 = parameter->Cylinder.Radius1;
 		rotator.Radius2 = parameter->Cylinder.Radius2;
 		rotator.Depth = parameter->Cylinder.Depth;
+
+		primitiveGenerator = [rotator](float value) -> Vec2f {
+			return rotator.GetPosition(value);
+		};
+	}
+	else if (parameter->PrimitiveType == ProcedualModelPrimitiveType::Spline3)
+	{
+		RotatorSpline3 rotator;
+		rotator.Point1 = parameter->Spline3.Point1;
+		rotator.Point2 = parameter->Spline3.Point2;
+		rotator.Point3 = parameter->Spline3.Point3;
+		rotator.Point4 = parameter->Spline3.Point4;
+		rotator.Calculate();
 
 		primitiveGenerator = [rotator](float value) -> Vec2f {
 			return rotator.GetPosition(value);

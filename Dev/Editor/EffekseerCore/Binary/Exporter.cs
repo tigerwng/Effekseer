@@ -731,7 +731,7 @@ namespace Effekseer.Binary
 										
 					data.Add(primitiveType.GetBytes());
 
-					if(param.PrimitiveType.Value == ProcedualModelPrimitiveType.Sphere)
+					if (param.PrimitiveType.Value == ProcedualModelPrimitiveType.Sphere)
 					{
 						data.Add(param.Radius.Value.GetBytes());
 						data.Add(param.DepthMin.Value.GetBytes());
@@ -747,6 +747,13 @@ namespace Effekseer.Binary
 						data.Add(param.Radius.Value.GetBytes());
 						data.Add(param.Radius2.Value.GetBytes());
 						data.Add(param.Depth.Value.GetBytes());
+					}
+					else if (param.PrimitiveType.Value == ProcedualModelPrimitiveType.Spline3)
+					{
+						data.Add((byte[])param.Point1);
+						data.Add((byte[])param.Point2);
+						data.Add((byte[])param.Point3);
+						data.Add((byte[])param.Point4);
 					}
 
 					data.Add((byte[])param.TiltNoiseFrequency);
