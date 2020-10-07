@@ -713,8 +713,7 @@ namespace Effekseer.Binary
 					{
 						data.Add(param.AngleBeginEnd.X.Value.GetBytes());
 						data.Add(param.AngleBeginEnd.Y.Value.GetBytes());
-						data.Add(param.AngleDivision.Value.GetBytes());
-						data.Add(param.AxisDivision.Value.GetBytes());
+						data.Add((byte[])param.Divisions);
 					}
 					else
 					{
@@ -748,7 +747,7 @@ namespace Effekseer.Binary
 						data.Add(param.Radius2.Value.GetBytes());
 						data.Add(param.Depth.Value.GetBytes());
 					}
-					else if (param.PrimitiveType.Value == ProcedualModelPrimitiveType.Spline3)
+					else if (param.PrimitiveType.Value == ProcedualModelPrimitiveType.Spline4)
 					{
 						data.Add((byte[])param.Point1);
 						data.Add((byte[])param.Point2);

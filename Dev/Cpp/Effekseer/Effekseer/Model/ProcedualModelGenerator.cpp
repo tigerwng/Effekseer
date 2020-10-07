@@ -373,7 +373,9 @@ struct RotatorSpline3
 			distance -= distances_[i];
 		}
 
-		return Vec2f(generator.GetValue(distances_.size()).GetX(), generator.GetValue(distances_.size()).GetY());
+		value = static_cast<float>(distances_.size());
+
+		return Vec2f(generator.GetValue(value).GetX(), generator.GetValue(value).GetY());
 	}
 };
 
@@ -709,13 +711,13 @@ Model* ProcedualModelGenerator::Generate(const ProcedualModelParameter* paramete
 			return rotator.GetPosition(value);
 		};
 	}
-	else if (parameter->PrimitiveType == ProcedualModelPrimitiveType::Spline3)
+	else if (parameter->PrimitiveType == ProcedualModelPrimitiveType::Spline4)
 	{
 		RotatorSpline3 rotator;
-		rotator.Point1 = parameter->Spline3.Point1;
-		rotator.Point2 = parameter->Spline3.Point2;
-		rotator.Point3 = parameter->Spline3.Point3;
-		rotator.Point4 = parameter->Spline3.Point4;
+		rotator.Point1 = parameter->Spline4.Point1;
+		rotator.Point2 = parameter->Spline4.Point2;
+		rotator.Point3 = parameter->Spline4.Point3;
+		rotator.Point4 = parameter->Spline4.Point4;
 		rotator.Calculate();
 
 		primitiveGenerator = [rotator](float value) -> Vec2f {
@@ -762,7 +764,7 @@ Model* ProcedualModelGenerator::Generate(const ProcedualModelParameter* paramete
 		generator.AngleMin = AngleBegin;
 		generator.AngleMax = AngleEnd;
 		generator.IsConnected = isConnected;
-		auto generated = generator.Generate(parameter->Mesh.AngleDivision, parameter->Mesh.DepthDivision);
+		auto generated = generator.Generate(parameter->Mesh.Divisions[0], parameter->Mesh.Divisions[1]);
 		CalculateNormal(generated);
 		CalculateVertexColor(generated, parameter->ColorLeft, parameter->ColorCenter, parameter->ColorRight, parameter->ColorLeftMiddle, parameter->ColorCenterMiddle, parameter->ColorRightMiddle);
 		return ConvertMeshToModel(generated);

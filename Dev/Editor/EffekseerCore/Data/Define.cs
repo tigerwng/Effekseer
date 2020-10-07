@@ -607,7 +607,7 @@ namespace Effekseer.Data
 		[Key(key = "ProcedualModelPrimitiveType_Cylinder")]
 		Cylinder,
 		[Key(key = "ProcedualModelPrimitiveType_Spline")]
-		Spline3,
+		Spline4,
 	}
 
 	public enum ProcedualModelCrossSectionType : int
@@ -634,12 +634,8 @@ namespace Effekseer.Data
 		public Value.Vector2D AngleBeginEnd { get; private set; } = new Value.Vector2D(0.0f, 360.0f);
 
 		[Selected(ID = SelecterType, Value = (int)ProcedualModelType.Mesh)]
-		[Key(key = "PM_AngleDivision")]
-		public Value.Int AngleDivision { get; private set; } = new Value.Int(10, int.MaxValue, 2, 1);
-
-		[Selected(ID = SelecterType, Value = (int)ProcedualModelType.Mesh)]
-		[Key(key = "PM_AxisDivision")]
-		public Value.Int AxisDivision { get; private set; } = new Value.Int(10, int.MaxValue, 2, 1);
+		[Key(key = "PM_Divisions")]
+		public Value.Int2 Divisions { get; private set; } = new Value.Int2(10, 10, x_min: 2, y_min: 2);
 
 		[Selected(ID = SelecterType, Value = (int)ProcedualModelType.Ribbon)]
 		[Key(key = "PM_CrossSection")]
@@ -655,15 +651,15 @@ namespace Effekseer.Data
 
 
 		[Selected(ID = SelecterType, Value = (int)ProcedualModelType.Ribbon)]
-		[Key(key = "PM_ScaleTop")]
+		[Key(key = "PM_RibbonScales")]
 		public Value.Vector2D RibbonScales { get; private set; } = new Value.Vector2D(0.2f, 0.2f, x_step: 0.01f, y_step: 0.01f);
 
 		[Selected(ID = SelecterType, Value = (int)ProcedualModelType.Ribbon)]
-		[Key(key = "PM_ScaleTop")]
+		[Key(key = "PM_RibbonAngles")]
 		public Value.Vector2D RibbonAngles { get; private set; } = new Value.Vector2D(0.2f, 0.2f);
 
 		[Selected(ID = SelecterType, Value = (int)ProcedualModelType.Ribbon)]
-		[Key(key = "PM_Noises")]
+		[Key(key = "PM_RibbonNoises")]
 		public Value.Vector2D RibbonNoises { get; private set; } = new Value.Vector2D(0.0f, 0.0f);
 
 		[Selected(ID = SelecterType, Value = (int)ProcedualModelType.Ribbon)]
@@ -698,45 +694,64 @@ namespace Effekseer.Data
 		public Value.Float DepthMax { get; private set; } = new Value.Float(1.0f);
 
 		[Key(key = "PM_Point1")]
-		[Selected(ID = SelecterPrimitive, Value = (int)ProcedualModelPrimitiveType.Spline3)]
+		[Selected(ID = SelecterPrimitive, Value = (int)ProcedualModelPrimitiveType.Spline4)]
 		public Value.Vector2D Point1 { get; private set; } = new Value.Vector2D(1.0f, 0.0f);
 
 		[Key(key = "PM_Point2")]
-		[Selected(ID = SelecterPrimitive, Value = (int)ProcedualModelPrimitiveType.Spline3)]
+		[Selected(ID = SelecterPrimitive, Value = (int)ProcedualModelPrimitiveType.Spline4)]
 		public Value.Vector2D Point2 { get; private set; } = new Value.Vector2D(1.0f, 0.5f);
 
 		[Key(key = "PM_Point3")]
-		[Selected(ID = SelecterPrimitive, Value = (int)ProcedualModelPrimitiveType.Spline3)]
+		[Selected(ID = SelecterPrimitive, Value = (int)ProcedualModelPrimitiveType.Spline4)]
 		public Value.Vector2D Point3 { get; private set; } = new Value.Vector2D(1.0f, 1.0f);
 
 		[Key(key = "PM_Point4")]
-		[Selected(ID = SelecterPrimitive, Value = (int)ProcedualModelPrimitiveType.Spline3)]
+		[Selected(ID = SelecterPrimitive, Value = (int)ProcedualModelPrimitiveType.Spline4)]
 		public Value.Vector2D Point4 { get; private set; } = new Value.Vector2D(1.0f, 2.0f);
 
+		[Key(key = "PM_TiltNoiseFreq")]
 		public Value.Vector2D TiltNoiseFrequency { get; private set; } = new Value.Vector2D(1.0f, 1.0f, x_step: 0.01f, y_step: 0.01f);
 
+		[Key(key = "PM_TiltNoiseOffset")]
 		public Value.Vector2D TiltNoiseOffset { get; private set; } = new Value.Vector2D(0.0f, 0.0f, x_step: 0.01f, y_step: 0.01f);
 
+		[Key(key = "PM_TiltNoisePower")]
 		public Value.Vector2D TiltNoisePower { get; private set; } = new Value.Vector2D(0.0f, 0.0f, x_step: 0.01f, y_step: 0.01f);
 
+		[Key(key = "PM_WaveNoiseFreq")]
 		public Value.Vector3D WaveNoiseFrequency { get; private set; } = new Value.Vector3D(1.0f, 1.0f, 1.0f, x_step: 0.01f, y_step: 0.01f, z_step:0.01f);
+
+		[Key(key = "PM_WaveNoiseOffset")]
 		public Value.Vector3D WaveNoiseOffset { get; private set; } = new Value.Vector3D(0.0f, 0.0f, 0.0f, x_step: 0.01f, y_step: 0.01f, z_step: 0.01f);
+
+		[Key(key = "PM_WaveNoisePower")]
 		public Value.Vector3D WaveNoisePower { get; private set; } = new Value.Vector3D(0.0f, 0.0f, 0.0f, x_step: 0.01f, y_step: 0.01f, z_step: 0.01f);
 
+		[Key(key = "PM_CurlNoiseFreq")]
+
 		public Value.Vector3D CurlNoiseFrequency { get; private set; } = new Value.Vector3D(1.0f, 1.0f, 1.0f, x_step: 0.01f, y_step: 0.01f, z_step: 0.01f);
+
+		[Key(key = "PM_CurlNoiseOffset")]
 		public Value.Vector3D CurlNoiseOffset { get; private set; } = new Value.Vector3D(0.0f, 0.0f, 0.0f, x_step: 0.01f, y_step: 0.01f, z_step: 0.01f);
+		[Key(key = "PM_WaveNoisePower")]
 		public Value.Vector3D CurlNoisePower { get; private set; } = new Value.Vector3D(0.0f, 0.0f, 0.0f, x_step: 0.01f, y_step: 0.01f, z_step: 0.01f);
 
+		[Key(key = "PM_ColorLeft")]
 		public Value.Color ColorLeft { get; private set; } = new Value.Color(255, 255, 255, 255);
 
+		[Key(key = "PM_ColorCenter")]
 		public Value.Color ColorCenter { get; private set; } = new Value.Color(255, 255, 255, 255);
 
+		[Key(key = "PM_ColorRight")]
 		public Value.Color ColorRight { get; private set; } = new Value.Color(255, 255, 255, 255);
 
+		[Key(key = "PM_ColorLeftMiddle")]
 		public Value.Color ColorLeftMiddle { get; private set; } = new Value.Color(255, 255, 255, 255);
 
+		[Key(key = "PM_ColorCenterMiddle")]
 		public Value.Color ColorCenterMiddle { get; private set; } = new Value.Color(255, 255, 255, 255);
 
+		[Key(key = "PM_ColorRightMiddle")]
 		public Value.Color ColorRightMiddle { get; private set; } = new Value.Color(255, 255, 255, 255);
 
 		public override bool Equals(object obj)
@@ -754,9 +769,7 @@ namespace Effekseer.Data
 					return false;
 				if (AngleBeginEnd.Y != param.AngleBeginEnd.Y)
 					return false;
-				if (AngleDivision.Value != param.AngleDivision.Value)
-					return false;
-				if (AxisDivision.Value != param.AxisDivision.Value)
+				if (!Divisions.ValueEquals(param.Divisions))
 					return false;
 			}
 			else if (Type.Value == ProcedualModelType.Ribbon)
@@ -810,7 +823,7 @@ namespace Effekseer.Data
 				if (Depth.Value != param.Depth.Value)
 					return false;
 			}
-			else if (PrimitiveType.Value == ProcedualModelPrimitiveType.Spline3)
+			else if (PrimitiveType.Value == ProcedualModelPrimitiveType.Spline4)
 			{
 				if (!Point1.ValueEquals(param.Point1))
 					return false;
@@ -870,7 +883,7 @@ namespace Effekseer.Data
 
 			if (Type.Value == ProcedualModelType.Mesh)
 			{
-				hash = Utils.Misc.CombineHashCodes(new[] { hash, AngleBeginEnd.X.Value.GetHashCode(), AngleBeginEnd.Y.Value.GetHashCode(), AngleDivision.Value.GetHashCode(), AxisDivision.Value.GetHashCode() });
+				hash = Utils.Misc.CombineHashCodes(new[] { hash, AngleBeginEnd.X.Value.GetHashCode(), AngleBeginEnd.Y.Value.GetHashCode(), Divisions.GetValueHashCode() });
 			}
 			else if (Type.Value == ProcedualModelType.Ribbon)
 			{
@@ -895,7 +908,7 @@ namespace Effekseer.Data
 			{
 				hash = Utils.Misc.CombineHashCodes(new[] { hash, Depth.Value.GetHashCode(), Radius.Value.GetHashCode(), Radius2.Value.GetHashCode() });
 			}
-			else if (PrimitiveType.Value == ProcedualModelPrimitiveType.Spline3)
+			else if (PrimitiveType.Value == ProcedualModelPrimitiveType.Spline4)
 			{
 				hash = Utils.Misc.CombineHashCodes(new[] { hash, Point1.GetValueHashCode(), Point2.GetValueHashCode(), Point3.GetValueHashCode(), Point4.GetValueHashCode() });
 			}

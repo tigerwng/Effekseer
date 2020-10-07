@@ -72,7 +72,7 @@ enum class ProcedualModelPrimitiveType : int32_t
 	Sphere,
 	Cone,
 	Cylinder,
-	Spline3,
+	Spline4,
 };
 
 enum class ProcedualModelCrossSectionType : int32_t
@@ -92,8 +92,7 @@ struct ProcedualModelParameter
 		{
 			float AngleBegin;
 			float AngleEnd;
-			int AngleDivision;
-			int DepthDivision;
+			std::array<int,2> Divisions;
 		} Mesh;
 
 		struct
@@ -135,7 +134,7 @@ struct ProcedualModelParameter
 			std::array<float, 2> Point2;
 			std::array<float, 2> Point3;
 			std::array<float, 2> Point4;
-		} Spline3;
+		} Spline4;
 	};
 
 	std::array<float, 2> TiltNoiseFrequency = {};
@@ -172,11 +171,11 @@ struct ProcedualModelParameter
 			if (Mesh.AngleEnd != rhs.Mesh.AngleEnd)
 				return Mesh.AngleEnd < rhs.Mesh.AngleEnd;
 
-			if (Mesh.AngleDivision != rhs.Mesh.AngleDivision)
-				return Mesh.AngleDivision < rhs.Mesh.AngleDivision;
+			if (Mesh.Divisions[0] != rhs.Mesh.Divisions[0])
+				return Mesh.Divisions[0] < rhs.Mesh.Divisions[0];
 
-			if (Mesh.DepthDivision != rhs.Mesh.DepthDivision)
-				return Mesh.DepthDivision < rhs.Mesh.DepthDivision;
+			if (Mesh.Divisions[1] != rhs.Mesh.Divisions[1])
+				return Mesh.Divisions[1] < rhs.Mesh.Divisions[1];
 		}
 		else if (Type == ProcedualModelType::Ribbon)
 		{
@@ -239,19 +238,19 @@ struct ProcedualModelParameter
 			if (Cylinder.Depth != rhs.Cylinder.Depth)
 				return Cylinder.Depth < rhs.Cylinder.Depth;
 		}
-		else if (PrimitiveType == ProcedualModelPrimitiveType::Spline3)
+		else if (PrimitiveType == ProcedualModelPrimitiveType::Spline4)
 		{
-			if (Spline3.Point1 != rhs.Spline3.Point1)
-				return Spline3.Point1 < rhs.Spline3.Point1;
+			if (Spline4.Point1 != rhs.Spline4.Point1)
+				return Spline4.Point1 < rhs.Spline4.Point1;
 
-			if (Spline3.Point2 != rhs.Spline3.Point2)
-				return Spline3.Point2 < rhs.Spline3.Point2;
+			if (Spline4.Point2 != rhs.Spline4.Point2)
+				return Spline4.Point2 < rhs.Spline4.Point2;
 
-			if (Spline3.Point3 != rhs.Spline3.Point3)
-				return Spline3.Point3 < rhs.Spline3.Point3;
+			if (Spline4.Point3 != rhs.Spline4.Point3)
+				return Spline4.Point3 < rhs.Spline4.Point3;
 
-			if (Spline3.Point4 != rhs.Spline3.Point4)
-				return Spline3.Point4 < rhs.Spline3.Point4;
+			if (Spline4.Point4 != rhs.Spline4.Point4)
+				return Spline4.Point4 < rhs.Spline4.Point4;
 		}
 		else
 		{
@@ -315,8 +314,7 @@ struct ProcedualModelParameter
 		{
 			reader.Read(Mesh.AngleBegin);
 			reader.Read(Mesh.AngleEnd);
-			reader.Read(Mesh.AngleDivision);
-			reader.Read(Mesh.DepthDivision);
+			reader.Read(Mesh.Divisions);
 		}
 		else if (Type == ProcedualModelType::Ribbon)
 		{
@@ -352,12 +350,12 @@ struct ProcedualModelParameter
 			reader.Read(Cylinder.Radius2);
 			reader.Read(Cylinder.Depth);
 		}
-		else if (PrimitiveType == ProcedualModelPrimitiveType::Spline3)
+		else if (PrimitiveType == ProcedualModelPrimitiveType::Spline4)
 		{
-			reader.Read(Spline3.Point1);
-			reader.Read(Spline3.Point2);
-			reader.Read(Spline3.Point3);
-			reader.Read(Spline3.Point4);
+			reader.Read(Spline4.Point1);
+			reader.Read(Spline4.Point2);
+			reader.Read(Spline4.Point3);
+			reader.Read(Spline4.Point4);
 		}
 
 		reader.Read(TiltNoiseFrequency);
